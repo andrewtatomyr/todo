@@ -45,23 +45,8 @@ var TodoSchema = new mongoose.Schema({
 
 });
 
-console.log("creating model 'Level'");
-var Level= mongoose.model("Level", LevelSchema);
 
-
-var seekInLevel= function(/*query*/) {
-  var blbl;//?
-
-  Level.find(/*query,*/ function(err,levels) {
-    if (err) {
-      throw err;
-    } else {
-      blbl= levels;//?
-    }
-  });
-
-  return blbl;//?
-}
+var Todo= mongoose.model("Todo", TodoSchema);
 
 
 
@@ -73,60 +58,36 @@ var seekInLevel= function(/*query*/) {
 
 
 
-  app.get("/api/get-hl", function(req,res) {
+  app.get("/api/todo", function(req,res) {
 
-    Level.find(function(err,levels) {
+    Todo.find(function(err,todos) {
       if (err) {
         res.send(err);
       } else {
-        res.json(levels);
+        res.json(todos);
       }
     });
 
   });
 /**/
-  app.get("/api/set-hl", function(req,res) {
-    console.log("Cookies: ", req.cookies);
+  app.post("/api/todo", function(req,res) {
+    //console.log("Cookies: ", req.cookies);
 
-    var mood= req.cookies.my_mood;
-    console.log("mood: ", mood);
-    var urid= req.cookies.urid;
-    console.log("urid: ", urid);
+    //var mood= req.cookies.my_mood;
+    //console.log("mood: ", mood);
+    var newTask= req.body.new_task;
+    console.log("task: ", newtask);
     var now= Math.round(new Date().getTime()/1000.0);
     console.log("now (UNIX): ", now);
 
 
-    Level.findOne({"urid": urid}, function(err,levels) {
-      if (err) {
-        res.send(err);
-//      } else if (levels) {
 
-//        console.log(levels);
-/*
-        Level.update(
-          {"urid": urid},
-          {
-            "urid": urid,
-            "mood": mood,
-            "unixTime": now
-          },
-        function(err,numAffected) {
-          if (err) {
-            res.send(err);
-          } else {
-            console.log('Levels updated');
-
-            //res.end();
-          }
-        });
-*/
-      } else {
 /**/
-        Level.create(  //save??
+        Todo.create(  //save??
           {
-            "urid": urid,
-            "mood": mood,
-            "unixTime": now
+            "task": newTask,
+            "executed": false,
+            "time": now
           },
         function(err, level  ) {  //'level'???
           if (err) {
@@ -134,20 +95,20 @@ var seekInLevel= function(/*query*/) {
           } else {
             console.log('Levels created');
 
+            Todo.find(function(err,todos) {
+              if (err) {
+                res.send(err);
+              } else {
+                res.json(todos);
+              }
+            });
+
             //res.end();
           }
 
         });
 /**/
-      }
-
-      res.json(levels);
-
-    });
-
-  });
-
-
+  
 
 
 
