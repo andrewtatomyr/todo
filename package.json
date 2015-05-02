@@ -5,12 +5,12 @@
   "main"          : "server.js",
   "author"        : "a.t.",
   "dependencies"  : {
-    "express"       : "~4.7.2",
-    "mongoose"      : "~3.6.2",
+    "express"       : "*",
+    "mongoose"      : "*",
 
-    "body-parser"   : "~1.5.2",
+    "body-parser"   : "*",
     "cookie-parser" : "*",
-    "method-override":"~2.1.2",
+    "method-override":"*",
     "mongodb"       : "*"
   }
 }

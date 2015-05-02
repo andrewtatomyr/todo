@@ -2,12 +2,12 @@
 var express= require("express");
 var app= express();
 var mongoose= require("mongoose");
-var cookieParser = require('cookie-parser');
+
 
 //var morgan= require("morgan");
-//var bodyParser= require("body-parser");
-//var cookieParser= require("cookie-parser");
-//var methodOverride= require("method-override");
+var bodyParser= require("body-parser");
+var cookieParser = require('cookie-parser');
+var methodOverride= require("method-override");
 
 
 
@@ -15,19 +15,18 @@ var cookieParser = require('cookie-parser');
 // configuration
 
 /**/
-mongoose.connect('mongodb://hm:12345678@proximus.modulusmongo.net:27017/umud5adU'); //my own on modulus.io: { "login": "todo", "password": "12345678" }
+mongoose.connect('mongodb://todo:12345678@proximus.modulusmongo.net:27017/irOnub4i'); //my own on modulus.io: { "login": "todo", "password": "12345678" }
 
 /**/
 app.set('port', (process.env.PORT || 5001));//
 /**/
 app.use(express.static(__dirname+'/public'));
 //app.use(morgan("dev"));
-app.use(cookieParser());
-//app.use(bodyParser.urlencoded({'extended': 'true'}));
-//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({'extended': 'true'})); //без цього не хотіло читати дані POST :) Очевидно!
+app.use(bodyParser.json());
 //app.use(bodyParser.json({ type: "application/vnd.api+json"}));
-//app.use(methodOverride());
-
+app.use(methodOverride());
+app.use(cookieParser());
 
 
 
@@ -38,8 +37,8 @@ app.use(cookieParser());
 
 var TodoSchema = new mongoose.Schema({
 
-
-  "task": Number,
+  "urid": Number,
+  "task": String,
   "executed": Boolean,
   "time": Number
 
@@ -60,7 +59,10 @@ var Todo= mongoose.model("Todo", TodoSchema);
 
   app.get("/api/todo", function(req,res) {
 
-    Todo.find(function(err,todos) {
+    var urid= req.cookies.urid;
+    console.log("urid: ", urid);
+
+    Todo.find({"urid": urid}, function(err,todos) {
       if (err) {
         res.send(err);
       } else {
@@ -73,79 +75,53 @@ var Todo= mongoose.model("Todo", TodoSchema);
   app.post("/api/todo", function(req,res) {
     //console.log("Cookies: ", req.cookies);
 
-    //var mood= req.cookies.my_mood;
-    //console.log("mood: ", mood);
+    var urid= req.cookies.urid;
+    console.log("urid: ", urid);
+
     var newTask= req.body.new_task;
-    console.log("task: ", newtask);
+    console.log("task: ", newTask);
+
     var now= Math.round(new Date().getTime()/1000.0);
     console.log("now (UNIX): ", now);
 
 
 
+
+    Todo.create(  //save?? //write in DB
+      {
+        "urid": urid,
+        "task": newTask,
+        "executed": false,
+        "time": now
+      },
+    function(err, todo  ) {  //'level'???
+      if (err) {
+        res.send(err);
+      } else {
+        console.log('a new task created');
+/**
+        window.location = "/api/todo"; //why not?
+
 /**/
-        Todo.create(  //save??
-          {
-            "task": newTask,
-            "executed": false,
-            "time": now
-          },
-        function(err, level  ) {  //'level'???
+        Todo.find({"urid": urid}, function(err,todos) {
           if (err) {
             res.send(err);
           } else {
-            console.log('Levels created');
-
-            Todo.find(function(err,todos) {
-              if (err) {
-                res.send(err);
-              } else {
-                res.json(todos);
-              }
-            });
-
-            //res.end();
+            res.json(todos);
           }
-
         });
 /**/
-  
+            //res.end();?
+      }
+
+    });
+
+  });
+
 
 
 
 /**
-    Level.create({ //save??
-      "urid": urid,
-      "mood": mood,
-      "unixTime": now
-    }, function(err, level  ) {  //'level'???
-      if (err) {
-        res.send(err);
-      } else {
-        console.log('hl created');
-
-        /**
-        var blbl= seekInLevel();
-        console.log( seekInLevel(
-          //{ unixTime: {"$gt": now-24*60*60} }
-        ) );
-
-
-        res.json(blbl);
-
-        /**/
-//        Level.find(function(err,levels) {
-//          if (err) {
-//            res.send(err);
-//          } else {
-//            res.json(levels);
-//          }
-//        });
-        /**/
-//      }
-//    });
-
-//  });
-/*
   app.delete('/api/todos/:todo_id', function(req, res) {
     Todo.remove({
       _id: req.param.todo_id
@@ -165,7 +141,7 @@ var Todo= mongoose.model("Todo", TodoSchema);
 
 
   });
-*/
+/**/
 
 
 
@@ -178,14 +154,6 @@ app.get('*', function(req, res) {
 });
 
 
-
-
-
-// listen
-/**
-app.listen(8080);
-console.log("App listened on port 8080");
-/**/
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
