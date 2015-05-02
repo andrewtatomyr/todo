@@ -1,0 +1,26 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ToDo</title>
+  <!--link rel="stylesheet" type="text/css" href="res/style.css" -->
+  <link href="res/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+</head>
+<body>
+
+  <h1>To Do: </h1>
+
+  <div id="LIST" >...</div>
+
+  <form action="/api/:tid" method=post >
+    <textarea name=new_job  placeholder="Enter new task" ></textarea>
+    <input type=submit >
+  </form>
+
+
+
+  <script src="./res/jquery-1.11.2.min.js"></script>
+  <script src="./res/jquery-cookie-master/src/jquery.cookie.js"></script>
+  <script src="core.js"></script>
+
+</body>
+</html>
