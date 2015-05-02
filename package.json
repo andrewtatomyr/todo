@@ -1,5 +1,5 @@
 {
-  "name"          : "happiness-meter",
+  "name"          : "todo-test-node",
   "version"       : "0.0.1",
   "description"   :"---",
   "main"          : "server.js",
@@ -7,7 +7,7 @@
   "dependencies"  : {
     "express"       : "~4.7.2",
     "mongoose"      : "~3.6.2",
-    
+
     "body-parser"   : "~1.5.2",
     "cookie-parser" : "*",
     "method-override":"~2.1.2",
