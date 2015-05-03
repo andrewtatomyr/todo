@@ -7,13 +7,18 @@
 </head>
 <body>
 
-  <h1>To Do: </h1>
-  <hr>
-  <div id="LIST" >...</div>
-  <hr>
+  <table id=mainform style="padding:20px; " >
+    <tr>
+      <td style="padding:20px; border-radius: 10px;  " >
+        <h1>To Do: </h1>
+      </td>
+      <td style="border-left:1px solid black; padding:20px; border-radius: 10px; ">
+        <p id="LIST" >...</p>
+      </td>
+    </tr>
+  </table>
   <form action="/api/todo" method="post" >
-    <!--textarea name="new_task"  placeholder="Enter new task here" ></textarea-->
-    <input type="text" name="new_task" >
+    <textarea name="new_task"  placeholder="Enter a new task here" ></textarea>
     <br>
     <input type="submit" >
   </form>

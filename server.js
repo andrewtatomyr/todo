@@ -60,7 +60,7 @@ var Todo= mongoose.model("Todo", TodoSchema);
   app.get("/api/todo", function(req,res) {
 
     var urid= req.cookies.urid;
-    console.log("urid: ", urid);
+    console.log("request from urid: ", urid);
 
     Todo.find({"urid": urid}, function(err,todos) {
       if (err) {
