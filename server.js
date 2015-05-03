@@ -37,10 +37,10 @@ app.use(cookieParser());
 
 var TodoSchema = new mongoose.Schema({
 
-  "urid": Number,
+  "urid": String,
   "task": String,
   "executed": Boolean,
-  "time": Number
+  "time": Date
 
 });
 
@@ -75,34 +75,37 @@ var Todo= mongoose.model("Todo", TodoSchema);
   app.post("/api/todo", function(req,res) {
     //console.log("Cookies: ", req.cookies);
 
-    var urid= req.cookies.urid;
-    console.log("urid: ", urid);
+    //var urid= req.cookies.urid;
+    //console.log("urid: ", urid);
 
-    var newTask= req.body.new_task;
-    console.log("task: ", newTask);
+    //var newTask= req.body.new_task;
+    //console.log("task: ", newTask);
 
-    var now= Math.round(new Date().getTime()/1000.0);
-    console.log("now (UNIX): ", now);
+
+    //var now= /*Math.round(*/new Date()/*.getTime()/1000.0)*/;
+    //console.log("now: ", now);
 
 
 
 
     Todo.create(  //save?? //write in DB
-      {
+      /*{
         "urid": urid,
         "task": newTask,
         "executed": false,
         "time": now
-      },
+      }*/
+      req.body,
     function(err, todo  ) {  //'level'???
       if (err) {
         res.send(err);
       } else {
         console.log('a new task created');
+        res.send({msg: 'OK'});
 /**
         window.location = "/api/todo"; //why not?
 
-/**/
+/**
         Todo.find({"urid": urid}, function(err,todos) {
           if (err) {
             res.send(err);
