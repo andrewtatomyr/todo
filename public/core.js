@@ -53,7 +53,7 @@ function populateTasks() {
 }
 
 function addTask() {
-  alert('add');
+  //alert('add');
 
   var newTask= {
     urid: $.cookie("urid"),
