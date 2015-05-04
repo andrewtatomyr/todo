@@ -39,7 +39,7 @@ var TodoSchema = new mongoose.Schema({
   "urid": String,
   "task": String,
   "executed": Boolean,
-  "time": Date
+  "time": String
 
 });
 

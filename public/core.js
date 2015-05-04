@@ -55,8 +55,13 @@ function populateTasks() {
         var executed1= '';
         var executed2= '';
       }
+      var time= new Date(this.time);
+      var f_DT= time.getHours()+':'+time.getMinutes()+' ';
+      //f_DT+= time.getDay()+' ';
+      f_DT+= time.getDate()+'.'+(time.getMonth()+1)+'.'+time.getFullYear();
 
-      taskContent+= '<li id="'+this._id+'" class=tasks style="z-index:10; " >'+executed1 +this.task+' ('+this.time+')'+executed2+'</li>';
+
+      taskContent+= '<li id="'+this._id+'" class=tasks  >'+executed1 +this.task+' ('+f_DT+')'+executed2+'</li>';
     });
 
     $('#TODO').html(taskContent);
@@ -116,5 +121,5 @@ function deleteExecuted() {
       populateTasks();
     });
   }
-  
+
 }
