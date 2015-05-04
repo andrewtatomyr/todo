@@ -120,7 +120,28 @@ var Todo= mongoose.model("Todo", TodoSchema);
 
       }
     });
+  });
 
+  app.get('/api/delexec', function(req, res) {
+    /*
+    tid= req.params.tid; //витягуємо значення запиту
+    console.log('tid: '+tid);
+    */
+
+    Todo.remove({executed: true}, function(err) {
+      if (err) res.send(err);
+
+      //res.json(todos);
+
+
+      console.log('del some ');
+      //console.log(theTodo);
+
+
+      res.send({msg: 'OK'});
+
+    });
+    /**/
 
 
 

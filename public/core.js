@@ -13,8 +13,19 @@ $(document).ready(function() {
 
   $('#add_task').click(addTask); //чому тут не можна написати addTask() ??? чому без дужок??
 
+  $('body').on('mouseenter','.tasks', function() {
+    //alert('1');
+    $(this).css({"font-weight": "bold"});
+  });
+  $('body').on('mouseleave','.tasks', function() {
+    //alert('1');
+    $(this).css({"font-weight": "normal"});
+  });
   //$('li').click(/*this.id, getExec*/function() {alert('up!');});
   $('body').on('click','.tasks', getExec);
+
+
+  $('#delete_executed').click(deleteExecuted);
 
 });
 
@@ -78,16 +89,7 @@ function addTask() {
 }
 
 function getExec(/*element*/) {
-  /**
-  alert('update '+this.id);
-
-
-
-  /**/
-  var tid= this.id; //.toString();
-  //
-  //alert('update '+tid);
-  //
+  var tid= this.id;
   var taskContent= '';
   $.getJSON('/api/todo/'+tid, function(data) {
     /**/
@@ -103,8 +105,16 @@ function getExec(/*element*/) {
 
     taskContent+= '<li id="'+tid+'" class=tasks  >'+executed1 +data.task+' ('+data.time+')'+executed2+'</li>';
     $('#'+tid).html(taskContent);
-    **/
+    /**/
   });
+}
 
-  /**/
+function deleteExecuted() {
+
+  if (confirm('Delete executed?')) {
+    $.getJSON('/api/delexec', function(data) {
+      populateTasks();
+    });
+  }
+  
 }
