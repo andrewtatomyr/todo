@@ -14,12 +14,11 @@ var methodOverride= require("method-override");
 
 // configuration
 
-/**/
+
 mongoose.connect('mongodb://todo:12345678@proximus.modulusmongo.net:27017/irOnub4i'); //my own on modulus.io: { "login": "todo", "password": "12345678" }
 
-/**/
 app.set('port', (process.env.PORT || 5001));//
-/**/
+
 app.use(express.static(__dirname+'/public'));
 //app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({'extended': 'true'})); //без цього не хотіло читати дані POST :) Очевидно!
@@ -32,7 +31,7 @@ app.use(cookieParser());
 
 
 
-/**/
+
 // define model
 
 var TodoSchema = new mongoose.Schema({
@@ -71,40 +70,16 @@ var Todo= mongoose.model("Todo", TodoSchema);
     });
 
   });
-/**/
+
   app.post("/api/todo", function(req,res) {
-    //console.log("Cookies: ", req.cookies);
 
-    //var urid= req.cookies.urid;
-    //console.log("urid: ", urid);
-
-    //var newTask= req.body.new_task;
-    //console.log("task: ", newTask);
-
-
-    //var now= /*Math.round(*/new Date()/*.getTime()/1000.0)*/;
-    //console.log("now: ", now);
-
-
-
-
-    Todo.create(  //save?? //write in DB
-      /*{
-        "urid": urid,
-        "task": newTask,
-        "executed": false,
-        "time": now
-      }*/
-      req.body,
-    function(err, todo  ) {  //'level'???
+    Todo.create(req.body  /*save??*/, function(err, todo  ) {  //'todo'???
       if (err) {
         res.send(err);
       } else {
         console.log('a new task created');
+/**/
         res.send({msg: 'OK'});
-/**
-        window.location = "/api/todo"; //why not?
-
 /**
         Todo.find({"urid": urid}, function(err,todos) {
           if (err) {
@@ -116,12 +91,41 @@ var Todo= mongoose.model("Todo", TodoSchema);
 /**/
             //res.end();?
       }
-
     });
-
   });
 
 
+
+  app.get('/api/todo/:tid', function(req, res) {
+    tid= req.params.tid; //витягуємо значення запиту
+    console.log('tid: '+tid);
+    Todo.findById(tid, function(err,theTodo) {
+      if (err) {
+        res.send(err);
+      } else {
+        //res.json(todos);
+
+        theTodo.executed= !theTodo.executed;
+        console.log('and ... -> ');
+        console.log(theTodo);
+
+
+        theTodo.save(function(err) {
+          if (err) res.send.err();
+
+          console.log('task updated');
+          res.json(theTodo);
+          //res.send({msg: 'OK'});
+        });
+
+      }
+    });
+
+
+
+
+
+  });
 
 
 /**
@@ -160,4 +164,3 @@ app.get('*', function(req, res) {
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
-/**/

@@ -9,15 +9,12 @@ $(document).ready(function() {
 
   setUrid();
 
-  /*
-  var mf_h= $('table#mainform').height;
-  console.log(mf_h);
-  $("div#vert").css({'height': mf_h*0.75});
-  */
-
   populateTasks();
 
-  $('#submit').click(addTask); //чому тут не можна написати addTask() ??? а треба без дужок??
+  $('#add_task').click(addTask); //чому тут не можна написати addTask() ??? чому без дужок??
+
+  //$('li').click(/*this.id, getExec*/function() {alert('up!');});
+  $('body').on('click','.tasks', getExec);
 
 });
 
@@ -38,15 +35,26 @@ function populateTasks() {
   var taskContent= '';
 
   $.getJSON('/api/todo', function(data) {
-    $.each(data, function(){
-      taskContent+= '<li>'+this.task+'</li>';
+    $.each(data, function() {
+
+      if (this.executed) {
+        var executed1= '<strike>';
+        var executed2= '</strike>';
+      } else {
+        var executed1= '';
+        var executed2= '';
+      }
+
+      taskContent+= '<li id="'+this._id+'" class=tasks style="z-index:10; " >'+executed1 +this.task+' ('+this.time+')'+executed2+'</li>';
     });
 
-    $('#LIST').html(taskContent);
+    $('#TODO').html(taskContent);
   });
 }
 
 function addTask() {
+  alert('add');
+
   var newTask= {
     urid: $.cookie("urid"),
     task: $('#new_task').val(),
@@ -61,12 +69,42 @@ function addTask() {
     dataType: 'JSON'
   }).done(function(res) {
     if (res.msg==='OK') {
-      $("#new_task").val('');
+      $("#new_task").val(''); //textarea clear
       populateTasks();
     } else {
       alert('Error in DB writing');
     }
   });
+}
+
+function getExec(/*element*/) {
+  /**
+  alert('update '+this.id);
 
 
+
+  /**/
+  var tid= this.id; //.toString();
+  //
+  //alert('update '+tid);
+  //
+  var taskContent= '';
+  $.getJSON('/api/todo/'+tid, function(data) {
+    /**/
+    populateTasks();
+    /**
+    if (data.executed) {
+      var executed1= '<strike>';
+      var executed2= '</strike>';
+    } else {
+      var executed1= '';
+      var executed2= '';
+    }
+
+    taskContent+= '<li id="'+tid+'" class=tasks  >'+executed1 +data.task+' ('+data.time+')'+executed2+'</li>';
+    $('#'+tid).html(taskContent);
+    **/
+  });
+
+  /**/
 }
