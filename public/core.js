@@ -56,12 +56,13 @@ function populateTasks() {
         var executed2= '';
       }
       var time= new Date(this.time);
-      var f_DT= time.getHours()+':'+time.getMinutes()+' ';
+      var f_DT= '';
+      f_DT+= time.getHours()+':'+time.getMinutes()+' ';
       //f_DT+= time.getDay()+' ';
       f_DT+= time.getDate()+'.'+(time.getMonth()+1)+'.'+time.getFullYear();
 
 
-      taskContent+= '<li id="'+this._id+'" class=tasks  >'+executed1 +this.task+' ('+f_DT+')'+executed2+'</li>';
+      taskContent+= '<li id="'+this._id+'" class=tasks  >'+executed1 +'<big>'+this.task+'</big>'+' <small><span style="color:grey; ">('+f_DT+')</span></small>'+executed2+'</li>';
     });
 
     $('#TODO').html(taskContent);
